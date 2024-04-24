@@ -1,0 +1,37 @@
+version: '3.10'
+
+services:
+
+  service:
+    restart: always
+    container_name: app
+    build: .
+    ports:
+      - "8000:80"
+
+#  keycloak:
+#
+#    image: keycloak/keycloak:latest
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#    command:
+#      - start-dev
+  keycloak:
+      volumes:
+        - ./imports:/opt/jboss/keycloak/imports
+      image: quay.io/keycloak/keycloak
+      restart: always
+      ports:
+        - "8080:8080"
+      environment:
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+      command:
+        - "-Dkeycloak.migration.action=import"
+        - "-Dkeycloak.migration.provider=singleFile"
+        - "-Dkeycloak.migration.file=/opt/jboss/keycloak/imports/realm-export.json"
+        - "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+        - start-dev
