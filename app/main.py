@@ -52,6 +52,7 @@ async def service_alive(token: str = Header()):
         return "Wrong JWT Token"
 
 
+
 @app.get("/get_random_movie")
 async def get_random_movie(token: str = Header()):
     if (chech_for_role_test(token)):
